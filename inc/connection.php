@@ -16,5 +16,5 @@ $conn=mysqli_connect('localhost','root','','quran_project');
 // }
 
 
-// header('Content-Type: application/json');
-// header('Access-Allow-Origin: *');
+header('Content-Type: application/json');
+header('Access-Allow-Origin: *');
