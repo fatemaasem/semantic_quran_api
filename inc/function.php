@@ -1,38 +1,35 @@
 <?php 
-    function response_code($code,$mes){
-        if(is_array($mes)){
-           print_r( json_encode(( $mes)));
-           }
-        else{
-            echo "$mes";
-        }
-        http_response_code($code);
-    }
-    // function validateArrayId($array_id){
-    //     $aya_surah=[];//two dimintional array sort 3id and information for each id (numberofsurah and number of aya)
-    //     if(sizeof($array_id)==3){
-    //         for($i=0;$i<3;$i++){
-    //             $data=$array_id[$i];
-    //             $array_data=explode('-',$data);
-    //             if(sizeof($array_data)==3&&is_numeric($array_data[0])&&is_numeric($array_data[1])&&is_numeric($array_data[2])){
-    //                 $aya_surah[]= $array_data;
-                    
-    //             }
-    //             else{
-    //                 return false;//if eny id is not valid
-    //             }
+include "connection.php";
 
-    //         }
-    //         return  $aya_surah;
-    //     }
-    //     else{
-    //         return false;//if size of array is not equal 3
-    //     }
-        
-    //    }
-    // //    function creatNewArray($arr){
-    // //         return 
-    // //    }
-      
+// Function to send HTTP response code along with message
+function response_code($code, $message) {
+    header('Content-Type: application/json'); // Set JSON content type for response
+    http_response_code($code); // Set HTTP response code
+    echo json_encode(['error' => $message]); // Encode message as JSON and echo
+    exit; // Stop further execution
+}
+
+// Function to select Ayah based on query and return JSON response
+function selectAyah($query) {
+    global $conn; // Access global database connection variable
+    
+    $runQuery = mysqli_query($conn, $query); // Execute query
+    
+    if (!$runQuery) {
+        response_code(500, 'Database query failed.'); // Handle database query failure
+    }
+
+    $rowsCount = mysqli_num_rows($runQuery); // Count rows returned by query
+    
+    if ($rowsCount == 1) {
+        $ayah = json_encode(mysqli_fetch_assoc($runQuery)); // Fetch and encode row as JSON
+        echo $ayah; // Print JSON response
+    } else {
+        response_code(404, 'Ayah not found.'); // Handle case when Ayah is not found
+    }
+}
+?>
+
+    
       
        
